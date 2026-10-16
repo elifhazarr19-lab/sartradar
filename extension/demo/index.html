@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>ŞartRadar Demo Sayfası</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; margin: 0; padding: 0; background: #f0f2f5; }
+    /* Sol taraf: Web sayfası simülasyonu */
+    .web-page { width: 60%; padding: 40px; background: white; min-height: 100vh; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+    /* Sağ taraf: Eklenti popup simülasyonu */
+    .extension-panel { width: 400px; margin: 40px auto; background: white; border: 1px solid #ccc; border-radius: 8px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); height: fit-content; }
+    
+    h1 { color: #333; }
+    .content-box { border: 1px solid #ddd; padding: 20px; background: #fafafa; margin-bottom: 20px; }
+    
+    /* Popup Stilleri (Eklentidekiyle aynı) */
+    .ext-title { color: #1976d2; margin-top: 0; }
+    button { width: 100%; padding: 12px; background: #1976d2; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    button:disabled { background: #ccc; }
+    #loading { display: none; margin: 15px 0; color: #555; text-align: center; }
+    .finding-card { background: #fff3f3; border-left: 4px solid #d32f2f; padding: 10px; margin-top: 10px; }
+    .uncertainty-box { background: #fff8e1; border-left: 4px solid #ffb300; padding: 10px; margin-top: 10px; color: #795548; }
+  </style>
+</head>
+<body>
+
+  <!-- Web Sayfası İçeriği -->
+  <div class="web-page">
+    <h1>Örnek Hizmet Şartları</h1>
+    <div class="content-box">
+      <textarea id="pageText" rows="15" style="width: 100%; border:none; background:transparent; font-size:14px; resize:none;" readonly>
+Hizmetlerimize hoş geldiniz. Bu bir test abonelik sözleşmesidir.
+Hizmetimizi kullandığınızda premium aboneliğiniz aktifleşir.
+ÖNEMLİ: Aboneliğinizi fatura dönemi bitiminden önce iptal etmezseniz, sistem kartınızdan otomatik olarak yenileme ücreti çekecektir. Ödenen ücretler kesinlikle iade edilmez.
+Kişisel verileriniz iş ortaklarımızla pazarlama amacıyla paylaşılabilir.
+      </textarea>
+    </div>
+    <button id="clearTextBtn" style="background:#d32f2f; width:200px;">Metni Sil (Belirsizlik Testi İçin)</button>
+  </div>
+
+  <!-- Eklenti Paneli -->
+  <div class="extension-panel">
+    <h2 class="ext-title">ŞartRadar (Demo)</h2>
+    <p style="font-size: 13px; color: #666;">Bu panel eklentinin Cypress testleri için simüle edilmiş halidir.</p>
+    <button id="analyzeBtn">Sayfayı Analiz Et</button>
+    <div id="loading">⏳ Backend ile iletişim kuruluyor...</div>
+    <div id="resultArea"></div>
+  </div>
+
+  <script>
+    // Eklenti mantığının aynısı
+    document.getElementById('clearTextBtn').addEventListener('click', () => {
+      document.getElementById('pageText').value = "Burası kısa ve alakasız bir metin. Sözleşme yok.";
+    });
+
+    document.getElementById('analyzeBtn').addEventListener('click', async () => {
+      const resultArea = document.getElementById('resultArea');
+      document.getElementById('loading').style.display = 'block';
+      resultArea.innerHTML = '';
+      
+      const text = document.getElementById('pageText').value;
+
+      try {
+        const response = await fetch("http://localhost:3001/api/process-text", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rawText: text, title: "Demo Sayfası" })
+        });
+        const data = await response.json();
+        
+        document.getElementById('loading').style.display = 'none';
+
+        if (data.success === false && data.uncertainty?.isUncertain) {
+          resultArea.innerHTML = `<div class="uncertainty-box" id="uncertaintyBox"><strong>Belirsizlik:</strong> ${data.uncertainty.reason}</div>`;
+        } else if (data.success) {
+          let html = `<div style="font-size:24px; color:#d32f2f; font-weight:bold;" id="scoreBox">Risk Skoru: ${data.analysis.riskScore}</div>`;
+          data.analysis.verifiedFindings.forEach(f => {
+            html += `<div class="finding-card"><strong>${f.category}</strong><br><em>"${f.quote}"</em></div>`;
+          });
+          resultArea.innerHTML = html;
+        }
+      } catch (err) {
+        document.getElementById('loading').style.display = 'none';
+        resultArea.innerHTML = `<div class="uncertainty-box">Backend çalışmıyor!</div>`;
+      }
+    });
+  </script>
+</body>
+</html>

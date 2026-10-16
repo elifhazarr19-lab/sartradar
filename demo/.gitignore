@@ -1,0 +1,15 @@
+# Dependency directories
+node_modules/
+backend/node_modules/
+
+# Environment variables
+.env
+backend/.env
+
+# Cypress video and screenshots (Videoyu hocaya ayrıca atacaksan klasöre koyma, ama Github'da yer kaplamasın)
+cypress/videos/
+cypress/screenshots/
+
+# OS metadata
+.DS_Store
+Thumbs.db

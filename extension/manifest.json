@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "ŞartRadar",
+  "version": "1.0",
+  "description": "Kullanım koşullarını ve gizlilik politikalarını analiz eden risk aracı.",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ]
+}

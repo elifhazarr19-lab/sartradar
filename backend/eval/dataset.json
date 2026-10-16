@@ -1,0 +1,37 @@
+[
+  {
+    "id": "doc_spotify",
+    "source": "Spotify Abonelik Şartları",
+    "text": "Premium aboneliğinizi mevcut fatura döneminin sonundan önce iptal etmediğiniz takdirde, abonelik ücreti sistemde kayıtlı ödeme yönteminizden otomatik olarak tahsil edilmeye devam edecektir. Para iadesi yapılmaz.",
+    "expectedRiskCount": 2,
+    "expectedCategories": ["auto_renewal", "cancellation_refund"]
+  },
+  {
+    "id": "doc_google",
+    "source": "Google Gizlilik Politikası",
+    "text": "Hizmetlerimizi kullandığınızda topladığımız kişisel verileri, size daha iyi reklamlar sunabilmek amacıyla reklam ortaklarımızla ve diğer üçüncü taraflarla paylaşabiliriz.",
+    "expectedRiskCount": 1,
+    "expectedCategories": ["personal_data_sharing"]
+  },
+  {
+    "id": "doc_meta",
+    "source": "Meta Hizmet Koşulları",
+    "text": "Hizmet koşullarımızı herhangi bir zamanda, size önceden haber vermeksizin tek taraflı olarak değiştirme, askıya alma veya sonlandırma hakkımızı saklı tutarız.",
+    "expectedRiskCount": 1,
+    "expectedCategories": ["unilateral_changes"]
+  },
+  {
+    "id": "doc_amazon",
+    "source": "Amazon Kullanım Koşulları",
+    "text": "Hizmetlerimize yüklediğiniz veya gönderdiğiniz her türlü içerik üzerinde bize dünya çapında geçerli, geri alınamaz, telifsiz ve alt lisanslanabilir bir kullanım, çoğaltma ve dağıtma hakkı vermiş olursunuz.",
+    "expectedRiskCount": 1,
+    "expectedCategories": ["user_content_rights"]
+  },
+  {
+    "id": "doc_safe_blog",
+    "source": "Standart Güvenli Blog",
+    "text": "Sitemize hoş geldiniz. Yazılarımızı okuyabilir ve yorum yapabilirsiniz. Herhangi bir sorunuz olursa iletişim sayfamızdan bize ulaşmaktan çekinmeyin. Sitemiz tamamen ücretsizdir.",
+    "expectedRiskCount": 0,
+    "expectedCategories": []
+  }
+]

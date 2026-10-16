@@ -1,0 +1,40 @@
+describe('ŞartRadar Demo Videosu', () => {
+  
+  beforeEach(() => {
+    // Demo sayfasını ziyaret et
+    cy.visit('./demo/index.html')
+  })
+
+  it('Senaryo A - Mutlu Yol (Başarılı Analiz)', () => {
+    // Eklenti butonuna tıkla
+    cy.get('#analyzeBtn').click()
+    
+    // Yükleniyor yazısının çıktığını doğrula
+    cy.get('#loading').should('be.visible')
+    
+    // Risk skorunun geldiğini doğrula (timeout süresini uzun tutuyoruz LLM cevap versin diye)
+    cy.get('#scoreBox', { timeout: 15000 }).should('be.visible')
+    cy.get('#scoreBox').should('contain', 'Risk Skoru')
+    
+    // En az bir risk kartı oluştuğunu doğrula
+    cy.get('.finding-card').should('have.length.at.least', 1)
+    
+    // Videoda görmek için 2 saniye bekle
+    cy.wait(2000)
+  })
+
+  it('Senaryo B - Belirsizlik (Eksik veya İlgisiz Metin)', () => {
+    // Sayfadaki sözleşme metnini silip anlamsız kısa bir metin yap
+    cy.get('#clearTextBtn').click()
+    
+    // Analiz butonuna tıkla
+    cy.get('#analyzeBtn').click()
+    
+    // Belirsizlik kutusunun çıktığını doğrula
+    cy.get('#uncertaintyBox', { timeout: 10000 }).should('be.visible')
+    cy.get('#uncertaintyBox').should('contain', 'yetersiz')
+    
+    // Videoda görmek için 2 saniye bekle
+    cy.wait(2000)
+  })
+})
